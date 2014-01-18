@@ -1,0 +1,16 @@
+---
+- name: install packages
+  apt: name={{ item }} state=installed update_cache=yes
+  with_items:
+    - php-apc
+    - php-pear
+    - php5-cli
+    - php5-gd
+    - php5-fpm
+    - php5-mysql
+
+- name: set php path behavior to match previous
+  shell: sed -i 's/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php5/fpm/php.ini
+
+- name: give more memory to fpm processes
+  shell: sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/php5/fpm/php.ini
